@@ -37,36 +37,12 @@ class Student:
         else:
             return 'Ошибка'
     
-    # def __le__(self, student):
-    #     if isinstance(student, Student):
-    #         return (self.average_grade() <= student.average_grade())
-    #     else:
-    #         return 'Ошибка'
-    
     def __eq__(self, student):
         if isinstance(student, Student):
             return (self.average_grade() == student.average_grade())
         else:
             return 'Ошибка'
     
-    # def __ne__(self, student):
-    #     if isinstance(student, Student):
-    #         return (self.average_grade() != student.average_grade())
-    #     else:
-    #         return 'Ошибка'
-    
-    # def __ge__(self, student):
-    #     if isinstance(student, Student):
-    #         return (self.average_grade() >= student.average_grade())
-    #     else:
-    #         return 'Ошибка'
-    
-    # def __gt__(self, student):
-    #     if isinstance(student, Student):
-    #         return (self.average_grade() > student.average_grade())
-    #     else:
-    #         return 'Ошибка'
-
 class Mentor:
     def __init__(self, name, surname):
         self.name = name
@@ -96,36 +72,12 @@ class Lecturer(Mentor):
             return (self.average_grade() < lecturer.average_grade())
         else:
             return 'Ошибка'
-    
-    # def __le__(self, lecturer):
-    #     if isinstance(lecturer, Lecturer):
-    #         return (self.average_grade() <= lecturer.average_grade())
-    #     else:
-    #         return 'Ошибка'
-    
+     
     def __eq__(self, lecturer):
         if isinstance(lecturer, Lecturer):
             return (self.average_grade() == lecturer.average_grade())
         else:
             return 'Ошибка'
-    
-    # def __ne__(self, lecturer):
-    #     if isinstance(lecturer, Lecturer):
-    #         return (self.average_grade() != lecturer.average_grade())
-    #     else:
-    #         return 'Ошибка'
-    
-    # def __ge__(self, lecturer):
-    #     if isinstance(lecturer, Lecturer):
-    #         return (self.average_grade() >= lecturer.average_grade())
-    #     else:
-    #         return 'Ошибка'
-    
-    # def __gt__(self, lecturer):
-    #     if isinstance(lecturer, Lecturer):
-    #         return (self.average_grade() > lecturer.average_grade())
-    #     else:
-    #         return 'Ошибка'
         
 class Reviewer(Mentor):
     def __init__(self, name, surname):
