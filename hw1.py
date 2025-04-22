@@ -1,3 +1,6 @@
+from functools import total_ordering
+
+@total_ordering
 class Student:
     def __init__(self, name, surname, gender):
         self.name = name
@@ -8,7 +11,9 @@ class Student:
         self.grades = {}
         
     def average_grade(self):
-        grades_list = sum((list(self.grades.values())),[])
+        grades_list = [grade for grades in self.grades.values() for grade in grades]
+        if not grades_list:
+            return 0
         average = 0
         for grade in grades_list:
             average += grade
@@ -25,18 +30,18 @@ class Student:
     
     def __str__(self):
         return f"Имя: {self.name} \nФамилия: {self.surname} \nСредняя оценка за домашние задания: {self.average_grade()} \nКурсы в процессе изучения: {', '.join(self.courses_in_progress)} \nЗавершенные курсы: {', '.join(self.finished_courses)}"
-        
+      
     def __lt__(self, student):
         if isinstance(student, Student):
             return (self.average_grade() < student.average_grade())
         else:
             return 'Ошибка'
     
-    def __le__(self, student):
-        if isinstance(student, Student):
-            return (self.average_grade() <= student.average_grade())
-        else:
-            return 'Ошибка'
+    # def __le__(self, student):
+    #     if isinstance(student, Student):
+    #         return (self.average_grade() <= student.average_grade())
+    #     else:
+    #         return 'Ошибка'
     
     def __eq__(self, student):
         if isinstance(student, Student):
@@ -44,37 +49,40 @@ class Student:
         else:
             return 'Ошибка'
     
-    def __ne__(self, student):
-        if isinstance(student, Student):
-            return (self.average_grade() != student.average_grade())
-        else:
-            return 'Ошибка'
+    # def __ne__(self, student):
+    #     if isinstance(student, Student):
+    #         return (self.average_grade() != student.average_grade())
+    #     else:
+    #         return 'Ошибка'
     
-    def __ge__(self, student):
-        if isinstance(student, Student):
-            return (self.average_grade() >= student.average_grade())
-        else:
-            return 'Ошибка'
+    # def __ge__(self, student):
+    #     if isinstance(student, Student):
+    #         return (self.average_grade() >= student.average_grade())
+    #     else:
+    #         return 'Ошибка'
     
-    def __gt__(self, student):
-        if isinstance(student, Student):
-            return (self.average_grade() > student.average_grade())
-        else:
-            return 'Ошибка'
+    # def __gt__(self, student):
+    #     if isinstance(student, Student):
+    #         return (self.average_grade() > student.average_grade())
+    #     else:
+    #         return 'Ошибка'
 
 class Mentor:
     def __init__(self, name, surname):
         self.name = name
         self.surname = surname
         self.courses_attached = []
-          
+
+@total_ordering          
 class Lecturer(Mentor):
     def __init__(self, name, surname):
         super().__init__(name, surname)
         self.grades = {}
 
     def average_grade(self):
-        grades_list = sum((list(self.grades.values())),[])
+        grades_list = [grade for grades in self.grades.values() for grade in grades]
+        if not grades_list:
+            return 0
         average = 0
         for grade in grades_list:
             average += grade
@@ -89,11 +97,11 @@ class Lecturer(Mentor):
         else:
             return 'Ошибка'
     
-    def __le__(self, lecturer):
-        if isinstance(lecturer, Lecturer):
-            return (self.average_grade() <= lecturer.average_grade())
-        else:
-            return 'Ошибка'
+    # def __le__(self, lecturer):
+    #     if isinstance(lecturer, Lecturer):
+    #         return (self.average_grade() <= lecturer.average_grade())
+    #     else:
+    #         return 'Ошибка'
     
     def __eq__(self, lecturer):
         if isinstance(lecturer, Lecturer):
@@ -101,23 +109,23 @@ class Lecturer(Mentor):
         else:
             return 'Ошибка'
     
-    def __ne__(self, lecturer):
-        if isinstance(lecturer, Lecturer):
-            return (self.average_grade() != lecturer.average_grade())
-        else:
-            return 'Ошибка'
+    # def __ne__(self, lecturer):
+    #     if isinstance(lecturer, Lecturer):
+    #         return (self.average_grade() != lecturer.average_grade())
+    #     else:
+    #         return 'Ошибка'
     
-    def __ge__(self, lecturer):
-        if isinstance(lecturer, Lecturer):
-            return (self.average_grade() >= lecturer.average_grade())
-        else:
-            return 'Ошибка'
+    # def __ge__(self, lecturer):
+    #     if isinstance(lecturer, Lecturer):
+    #         return (self.average_grade() >= lecturer.average_grade())
+    #     else:
+    #         return 'Ошибка'
     
-    def __gt__(self, lecturer):
-        if isinstance(lecturer, Lecturer):
-            return (self.average_grade() > lecturer.average_grade())
-        else:
-            return 'Ошибка'
+    # def __gt__(self, lecturer):
+    #     if isinstance(lecturer, Lecturer):
+    #         return (self.average_grade() > lecturer.average_grade())
+    #     else:
+    #         return 'Ошибка'
         
 class Reviewer(Mentor):
     def __init__(self, name, surname):
@@ -207,19 +215,17 @@ def average_hw(students: list, course: str):
     all_grades = []
     for student in students:
         all_grades += student.grades.get(course, [])
-    sum = 0
-    for grade in all_grades:
-        sum += grade
-    return f"Средняя оценка за домашние задания по всем студентам в рамках курса {course}: {round(sum/len(all_grades), 1)}"
+    if not all_grades:
+        return f"Нет оценок по курсу {course}"
+    return f"Средняя оценка за домашние задания по всем студентам в рамках курса {course}: {round(sum(all_grades) / len(all_grades), 1)}"
 
 def average_lecture(lecturers: list, course: str):
     all_grades = []
     for lecturer in lecturers:
         all_grades += lecturer.grades.get(course, [])
-    sum = 0
-    for grade in all_grades:
-        sum += grade
-    return f"Средняя оценка за лекции всех лекторов в рамках курса {course}: {round(sum/len(all_grades), 1)}"
+    if not all_grades:
+        return f"Нет оценок по курсу {course}"
+    return f"Средняя оценка за лекции всех лекторов в рамках курса {course}: {round(sum(all_grades) / len(all_grades), 1)}"
 
 print(average_hw([student_1, student_2], 'Python'))
 print(average_lecture([lecturer_1, lecturer_2], 'Python'))
